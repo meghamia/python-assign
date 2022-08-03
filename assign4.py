@@ -79,7 +79,7 @@ try:
 except NegativeAgeException:
     print("Only positive integers are allowed")
 except:
-    print("something went wrong:") """
+    print("something went wrong:") 
 
 #example 5
 class TooYoungException(Exception):
@@ -101,3 +101,81 @@ except YoungException as e:
         print("Plz wait some time")
 except OldException as e:
         print("Your age too old ")
+
+
+#Example 6
+
+try:
+      print("outer try block")
+      n = int(input("enter a number"))
+      print(10/n)
+try:
+      print("inner try")
+      print("anu+preet")
+except TypeError:
+      print("Hello")
+else:
+      print("inner no exception")
+
+except ArithmeticError:
+      print(10/5)
+else:
+       print("outer no excepiton")
+finally:
+       print("finally block")   
+
+#Example 8
+
+class Person:
+
+     def __init__(self, first, last):
+              self.firstname = first
+                self.lastname = last
+def __str__(self):
+            return self.firstname +" " + self.lastname
+class Employee(Person):
+        def __init__(self, first, last, id):
+            super().__init__(first, last)
+                             self.id = id
+def __str__(self):
+            return super().__str__()+" "+self.id
+x = Person("kamalpreet", "gurpreet")
+y = Employee("kamalpreet", "gurpreet", "111")
+print(x)
+print(y)
+
+
+#Example 9
+
+class Vehicle:
+      def __del__(self):
+               print("Vehicle object destroyed")
+               print(10/0)
+v = Vehicle()
+del v"""
+
+#Example 10
+
+class Customer:
+      def __init__(self,name,bal=0.0):
+
+                   self.name=name
+                   self.bal=bal
+
+def deposit(self,amount):
+        self.bal=self.bal+amount
+def withdraw(self,amount):
+         if amount>self.bal:
+                raise RuntimeError("withdraw amount is more than balance")
+         else:
+                self.bal=self.bal-amount
+
+def remaining(self):
+    return self.bal;
+
+c = Customer("Komal&",10000)
+damt = int(input("enter amount to deposit"))
+c.deposit(damt)
+amt = int(input("enter amount to withdraw"))
+c.withdraw(amt)
+print(c.remaining())

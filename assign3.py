@@ -40,7 +40,7 @@ def a_func(a_var):
  	print("in a_func b_var =", b_var)
  	print("in a_func d_var =", d_var)
  	print("in a_func e_var =", e_var)
- return b_var + 10
+  return b_var + 10
 c_var = a_func(b_var)
 print("a_var =", a_var)
 print("b_var =", b_var)
@@ -111,13 +111,13 @@ print(eid,ename,esal)
 # method 8
 a,b=100,200
 class MyClass():
-a,b=10,20
+ a,b=10,20
 def add(self,a,b):
-print(a+b)
+ print(a+b)
 print(globals()['a']+globals()['b'])
 print(self.a+self.b)
 def mul(self,a,b):
-print(a*b)
+ print(a*b)
 print(globals()['a']+globals()['b'])
 print(self.a*self.b)
 c = MyClass()
@@ -128,15 +128,14 @@ c.mul(4,4)
 class Emp:
  	def __init__(self,eid,ename,esal):
  		self.eid=eid
- self.ename=ename
- 		self.esal=esal
- 	def __str__(self):
+self.ename=ename
+self.esal=esal
+def __str__(self):
  		return "emp id=%d Emp name=%s Emp sal=%g"%(self.eid,self.ename,self.esal)
 e1 = Emp(111,"kamal",100000.45)
 print(e1)
 e2 = Emp(111,"anu",200000.46)
-print(e2)"""
-
+print(e2)
 
 
 #method 10
@@ -157,3 +156,4 @@ class Test :
 Test.class_method_1()
 
 
+"""
