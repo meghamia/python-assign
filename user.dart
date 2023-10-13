@@ -94,6 +94,7 @@ class _SwagerUserState extends State<SwagerUser> {
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'package:test1/series7user.dart';
 
 Future<GetUserModel> fetchGetUserModel() async {
@@ -132,7 +133,7 @@ class _SwagerUserState extends State<SwagerUser> {
       body: Center(
         child: FutureBuilder<GetUserModel>(
           future: futureGetUserModel,
-          builder: (context, snapshot) {
+          builder: (BuildContext context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
@@ -153,16 +154,18 @@ class _SwagerUserState extends State<SwagerUser> {
                   ListTile(
                     title: Text('Total Pages: ${userModel.totalPages}'),
                   ),
-                  // Access and display data and support properties within ListTile
                   if (userModel.data != null)
-                    ListTile(
-                      title: Text('Data: ${userModel.data}'),
-                    ),
-
+                    ...userModel.data!.map((userData) {
+                      return ListTile(
+                        title: Text('ID: ${userData.id}'),
+                        subtitle: Text('Email: ${userData.email}'),
+                        trailing: Text('${userData.firstName} ${userData.lastName}'),
+                      );
+                    }).toList(),
                 ],
               );
             } else {
-              return  Text('No data available');
+              return Text('No data available');
             }
           },
         ),
@@ -187,9 +190,10 @@ class _SwagerUserState extends State<SwagerUser> {
 
 
 
-/*
-import 'dart:convert';
-import 'package:file_picker/file_picker.dart';
+
+
+
+/*import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test1/series7user.dart';
@@ -282,8 +286,8 @@ class _SwagerUserState extends State<SwagerUser> {
 //       ],
 //     );
 //   }
-// }
-*/
+// }*/
+
 
 
 
