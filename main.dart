@@ -73,141 +73,85 @@
 //   }
 // }
 
+import 'dart:io';
 
-
-//
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter_project/chatpage.dart';
-// import 'package:flutter_project/signin.dart';
-// import 'package:flutter_project/signup.dart';
-// import 'package:get/get.dart';
-//
-//
-//
-// void main() async {
-//    WidgetsFlutterBinding.ensureInitialized();
-//    //await Firebase.initializeApp();
-//   await initServices(); // Initialize your services if needed
-//   runApp(MyApp());
-// }
-//
-// Future<void> initServices() async {
-//   // Initialize your services here if needed
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetMaterialApp(
-//       title: 'Flutter Login Demo',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home:    HomePage(),
-//       //home: SignUp(),
-//     );
-//   }
-// }
-//
-// class HomePage extends StatelessWidget {
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.brown,
-//         title: Text('Home Page'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           children: [
-//             ElevatedButton(
-//               child: Text("click here"),
-//               onPressed:
-//                   ()=> Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => SignIn()),
-//               ),
-//             ),
-//             ElevatedButton(
-//               child: Text("click here"),
-//               onPressed:
-//                   ()=> Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => SignUp()),
-//               ),
-//             ),
-//             ElevatedButton(
-//               child: Text("click here"),
-//               onPressed:
-//                   ()=> Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => ChatPage()),
-//               ),
-//             ),
-//             // ElevatedButton(
-//             //   onPressed: () {
-//             //     Get.to(LoginPage());
-//             //   },
-//             //   child: Text('Go to Login Page'),
-//             // ),
-//           ],
-//         ),
-//
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/chatpage.dart';
-import 'package:flutter_project/home.dart';
-//import 'package:flutter_project/login.dart';
-import 'package:flutter_project/signin.dart';
-import 'package:flutter_project/signup.dart';
-import 'package:get/get.dart';
+import 'package:flutter_project/FirebaseHelper.dart';
+import 'package:flutter_project/HomePage.dart';
 
+import 'package:flutter_project/LoginPage.dart';
+import 'package:flutter_project/UserModel.dart';
 
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
-  await initServices(); // Initialize your services if needed
-  runApp(MyApp());
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+          options: FirebaseOptions(
+            apiKey: "AIzaSyDrW7xB1H4xVYYpc-vAqxiUp-9Czb68Ars",
+            appId: "1:796835058608:android:1040734e10f66d74a33c75",
+            messagingSenderId: "796835058608",
+            projectId: "final-ef46c",
+            storageBucket: "final-ef46c.appspot.com",
+          ),
+        )
+      : await Firebase.initializeApp();
+//picked up firebaseauth current user and checked that whether t is not null ,if it is not null that
+// i am already logged In
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    //Logged In
+    UserModel? thisUserModel =
+        await FirebaseHelper.getUserModelById(currentUser.uid);
+    if (thisUserModel != null) {
+      runApp(
+          MyAppLoggedIn(userModel: thisUserModel, firebaseUser: currentUser));
+    } else {
+      runApp(MyApp());
+    }
+  } else {
+    //Not Logged In
+    runApp(MyApp());
+  }
+
+  //await initServices(); // Initialize your services if needed
 }
 
-Future<void> initServices() async {
-  // Initialize your services here if needed
-}
-
-
-
+//Not Logged In
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return GetMaterialApp(
-            title: 'Flutter Login Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: SignUp(),
-          );
-        }
-
-        return CircularProgressIndicator(); // or any loading widget
-      },
+    return MaterialApp(
+      title: 'Flutter Login Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      //home:    HomePage(),
+      home: LoginPage(),
     );
   }
 }
 
+//Already Logged In
+class MyAppLoggedIn extends StatelessWidget {
+  final UserModel userModel;
+  final User firebaseUser;
 
+  const MyAppLoggedIn(
+      {super.key, required this.userModel, required this.firebaseUser});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Login Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(userModel: userModel, firebaseUser: firebaseUser),
+    );
+  }
+}
